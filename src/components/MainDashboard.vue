@@ -1,4 +1,14 @@
 <template>
+
+  <ui-grid class="demo">
+    <ui-grid-cell class="yellow" columns="6">
+      <div v-for="i in 1" :key="i">item {{ i }}</div>
+    </ui-grid-cell>
+    <ui-grid-cell class="yellow" columns="6">
+      <div v-for="i in 1" :key="i">item {{ i }}</div>
+    </ui-grid-cell>
+  </ui-grid>
+
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
@@ -32,7 +42,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'MainDashboard',
   props: {
     msg: String
   }
@@ -41,6 +51,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.yellow {
+  background: yellow;
+}
+
+.demo {
+  border: 1px solid;
+}
+
+.demo .mdc-layout-grid__inner {
+  background: cyan;
+}
 h3 {
   margin: 40px 0 0;
 }
