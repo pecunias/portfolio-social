@@ -1,10 +1,18 @@
 <template>
 
   <ui-grid class="demo">
-    <ui-grid-cell class="yellow" columns="6">
+    <ui-grid-cell class="yellow" columns="4">
       <div v-for="i in 1" :key="i">item {{ i }}</div>
     </ui-grid-cell>
-    <ui-grid-cell class="yellow" columns="6">
+    <ui-grid-cell class="yellow" columns="4" nested>
+          <ui-grid-cell class="demo-child-cell demo-cell" columns="6">
+            <stock-card></stock-card>
+          </ui-grid-cell>
+          <ui-grid-cell class="demo-child-cell demo-cell" columns="6">
+            <stock-card></stock-card>
+          </ui-grid-cell>
+    </ui-grid-cell>
+    <ui-grid-cell class="yellow" columns="4">
       <div v-for="i in 1" :key="i">item {{ i }}</div>
     </ui-grid-cell>
   </ui-grid>
@@ -41,9 +49,13 @@
 </template>
 
 <script>
+import StockCard from './subcomponents/StockCard.vue';
+
 export default {
+  components: { StockCard },
   name: 'MainDashboard',
-  props: {
+  
+    StockCardprops: {
     msg: String
   }
 }
