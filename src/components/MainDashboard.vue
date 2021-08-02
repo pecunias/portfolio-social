@@ -1,5 +1,21 @@
 <template>
 
+  <ul>
+    <li>
+      test
+      <p><strong>{{data.latestPrice}}</strong></p>
+      <p></p>
+    </li>
+  </ul>
+
+  <p v-if="loading">
+   Still loading..
+  </p>
+  <p v-if="error">
+
+
+  </p>
+
   <ui-grid class="demo">
     <ui-grid-cell class="yellow" columns="4">
       <div v-for="i in 1" :key="i">item {{ i }}</div>
@@ -50,13 +66,58 @@
 
 <script>
 import StockCard from './subcomponents/StockCard.vue';
-
+import { ref, onMounted } from "vue";
 export default {
   components: { StockCard },
   name: 'MainDashboard',
   
     StockCardprops: {
     msg: String
+  },
+  setup() {
+    const data = ref(null);
+    const loading = ref(true);
+    const error = ref(null);
+
+    function fetchData() {
+      loading.value = true;
+
+      return fetch('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo', {
+        method: 'get',
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+        .then(res => {
+          console.log(res);
+          if (!res.ok) {
+            const error = new Error(res.statusText);
+            error.json = res.json();
+            throw error;
+          }
+          return res.json();
+        }).then(json => {
+          // set the response data
+          let timeSeriesDaily = json['Time Series (Daily)'];
+          const latestPrice = timeSeriesDaily[Object.keys(timeSeriesDaily)[0]];
+          console.log(latestPrice['4. close']);
+          data.value = { latestPrice : latestPrice['4. close'] };
+          console.log(data);
+        }).then(() => {
+          loading.value = false;
+        })
+      // https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo
+    }
+
+    onMounted(() => {
+      fetchData();
+    });
+
+    return {
+      data,
+      loading,
+      error
+    }
   }
 }
 </script>
